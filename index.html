@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090d1a">
+  <meta name="description" content="CineVerse: buscador de películas con TMDB y JavaScript.">
+  <title>CineVerse | Explora el cine</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="container topbar" aria-label="Navegación principal">
+      <a class="logo" href="./" aria-label="CineVerse, inicio">✦ Cine<span>Verse</span></a>
+      <span class="top-label">TU UNIVERSO DE PELÍCULAS</span>
+    </nav>
+  </header>
+  <main>
+    <section class="hero container" aria-labelledby="hero-title">
+      <p class="eyebrow">● EXPLORA EL SÉPTIMO ARTE</p>
+      <h1 id="hero-title">Cada película es <em>un universo.</em></h1>
+      <p class="lead">Descubre nuevas historias. Busca una película y conoce su año, sinopsis y póster.</p>
+      <form id="search-form" role="search" class="search-form">
+        <label class="sr-only" for="movie-input">Nombre de la película</label>
+        <input id="movie-input" type="search" placeholder="Busca una película... Ej. Interstellar" required minlength="2" autocomplete="off">
+        <button id="search-button" type="submit">Buscar ↗</button>
+      </form>
+      <p class="suggestions">Prueba con:
+        <button class="suggestion" type="button" data-query="Avatar">Avatar</button>
+        <button class="suggestion" type="button" data-query="Batman">Batman</button>
+        <button class="suggestion" type="button" data-query="Titanic">Titanic</button>
+      </p>
+      <details class="api-settings" id="api-settings">
+        <summary>⚙ Configurar mi clave gratuita de TMDB</summary>
+        <form id="api-form" class="api-form">
+          <label for="api-key">API Key (v3)</label>
+          <div class="api-controls">
+            <input id="api-key" type="password" autocomplete="off" placeholder="Pega tu clave aquí" required>
+            <button type="submit">Usar clave</button>
+          </div>
+          <p>La clave se guarda solo en esta pestaña del navegador, no en GitHub. No la compartas.</p>
+        </form>
+      </details>
+    </section>
+    <section class="container results-section" aria-labelledby="results-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">DESCUBRE ALGO NUEVO</p><h2 id="results-title">Resultados <span>de búsqueda</span></h2></div>
+        <p id="results-count" aria-live="polite"></p>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite">Escribe el nombre de una película para comenzar. ✦</p>
+      <div id="results" class="movie-grid"></div>
+    </section>
+  </main>
+  <footer class="site-footer"><div class="container footer-content">
+    <p>© <span id="year"></span> CineVerse · HTML, CSS y JavaScript</p>
+    <p>Datos: <a href="https://www.themoviedb.org/" target="_blank" rel="noopener noreferrer">TMDB</a>. Este producto usa la API de TMDB, pero TMDB no lo respalda ni certifica.</p>
+  </div></footer>
+</body>
+</html>
