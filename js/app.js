@@ -5,22 +5,8 @@ const button = document.querySelector('#search-button');
 const results = document.querySelector('#results');
 const status = document.querySelector('#status');
 const count = document.querySelector('#results-count');
-const apiForm = document.querySelector('#api-form');
-const apiInput = document.querySelector('#api-key');
-const apiSettings = document.querySelector('#api-settings');
 
 document.querySelector('#year').textContent = new Date().getFullYear();
-
-// La clave vive solo en la sesión, nunca en el repositorio.
-apiForm.addEventListener('submit', event => {
-  event.preventDefault();
-  const key = apiInput.value.trim();
-  if (!key) return;
-  sessionStorage.setItem('cineverse_tmdb_key', key);
-  apiInput.value = '';
-  apiSettings.open = false;
-  showMessage('Clave configurada. ¡Ya puedes buscar películas!');
-});
 
 function showMessage(message, error = false) {
   status.textContent = message;
@@ -62,14 +48,6 @@ function createMovieCard(movie) {
 
 // fetch pide los datos; el DOM muestra los resultados sin recargar.
 async function searchMovies(query) {
-  const key = sessionStorage.getItem('cineverse_tmdb_key');
-  if (!key) {
-    apiSettings.open = true;
-    showMessage('Primero configura tu API Key (v3) de TMDB en el apartado superior.', true);
-    apiInput.focus();
-    return;
-  }
-
   button.disabled = true;
   results.replaceChildren();
   count.textContent = '';
@@ -81,15 +59,14 @@ async function searchMovies(query) {
   status.append(spinner, document.createTextNode('Buscando películas...'));
 
   try {
-    const url = new URL('https://api.themoviedb.org/3/search/movie');
-    url.searchParams.set('api_key', key);
+    // El Worker consulta TMDB y mantiene la clave fuera de GitHub.
+    const url = new URL('https://cineverse-api.alexguevara12715.workers.dev/search');
     url.searchParams.set('query', query);
-    url.searchParams.set('language', 'es-ES');
-    url.searchParams.set('include_adult', 'false');
-
     const response = await fetch(url);
-    if (response.status === 401) throw new Error('Clave de TMDB inválida. Configúrala nuevamente.');
-    if (!response.ok) throw new Error('No pudimos consultar TMDB (HTTP ' + response.status + ').');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'No pudimos consultar las películas (HTTP ' + response.status + ').');
+    }
 
     const data = await response.json();
     if (!Array.isArray(data.results)) throw new Error('La API devolvió una respuesta inesperada.');
