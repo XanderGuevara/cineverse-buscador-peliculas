@@ -12,17 +12,16 @@ Proyecto individual para Kodigo. Aplicación web semántica, adaptable a móvile
 
 ## Cómo usar
 1. Abre `index.html` con Live Server en VS Code o visita GitHub Pages cuando esté habilitado.
-2. Abre **Configurar mi clave gratuita de TMDB**.
-3. Introduce tu **API Key (v3)** de https://www.themoviedb.org/settings/api.
-4. Busca por título, por ejemplo **Batman**.
+2. Busca por título, por ejemplo **Batman**. No necesitas introducir ninguna clave: el frontend consulta un Cloudflare Worker que se comunica con TMDB.
 
-**Seguridad:** no hay ninguna API Key incluida en el repositorio. Se solicita al usuario y se conserva solo en `sessionStorage` de su pestaña; se elimina al terminar la sesión. En una aplicación de producción conviene usar un backend que proteja las credenciales. El tráfico a TMDB debe hacerse mediante HTTPS.
+**Seguridad:** la clave de TMDB se guarda como secreto `TMDB_API_KEY` en Cloudflare Workers. Nunca se incluye en el repositorio ni en el navegador. El código del intermediario está en `worker/index.js`.
 
 ## Estructura
 ```
 index.html
 css/styles.css
 js/app.js
+worker/index.js
 README.md
 ```
 
